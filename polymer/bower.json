@@ -1,0 +1,14 @@
+{
+  "name": "user-status",
+  "main": "user-status.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0-preview"
+  },
+  "devDependencies": {
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#v1"
+  },
+  "resolutions": {
+    "polymer": "2.0-preview"
+  }
+}
