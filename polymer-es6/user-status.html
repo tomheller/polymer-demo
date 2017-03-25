@@ -1,0 +1,166 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="user-status">
+  <template>
+    <svg viewBox="0 0 100 100" width="0" height="0" hidden>
+      <defs>
+        <symbol id="offline">
+          <rect x="25" y="25" width="50" height="50" fill="transparent" stroke="#efefef" stroke-width="2"></rect>
+        </symbol>
+        <symbol id="away">
+          <rect x="25" y="25" width="50" height="50" fill="#efd325"></rect>
+        </symbol>
+        <symbol id="busy">
+          <rect x="25" y="25" width="50" height="50" fill="#cc260e"></rect>
+        </symbol>
+        <symbol id="online">
+          <rect x="25" y="25" width="50" height="50" fill="#42d445"></rect>
+        </symbol>
+      </defs>
+    </svg>
+
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        --usercolor: #bada55;
+      }
+      .status,
+      .useravatar {
+        width: 4rem;
+        height: 4rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+      }
+
+      .status {
+        background-color: #cecece;
+        cursor: pointer;
+        position: relative;
+      }
+      
+      .selector {
+        position: absolute;
+      }
+
+      svg:not([hidden]) {
+        width: 100%;
+        height: 100%;
+      }
+
+      .useravatar {
+        border-radius: 50%;
+        background-color: var(--usercolor);
+        color: #fff;
+        font-size: 2rem;
+        line-height: 2em;
+        text-align: center;
+        vertical-align: middle;
+      }
+      
+      p {
+        font-size: 2em;
+      }
+    </style>
+
+    <div class="status" id="status">
+      <dom-if if="[[choosingStatus]]">
+        <template>
+          <div class="selector">
+            <button on-click="_changeStatus" data-status="offline">Offline</button>
+            <button on-click="_changeStatus" data-status="away">Away</button>
+            <button on-click="_changeStatus" data-status="busy">Busy</button>
+            <button on-click="_changeStatus" data-status="online">Online</button>
+          </div>
+        </template>
+      </dom-if>
+      <svg viewBox="0 0 100 100">
+        <use xlink:href="" xlink:href$="#[[status]]" >
+      </svg>
+    </div>
+
+
+    <!-- computed properties -->
+    <div class="useravatar">
+      [[userAbbreviation(name)]]
+    </div>
+
+    <!-- print properties in template --> 
+    <p>[[name]]</p>
+
+  </template>
+
+  <script>
+    class UserStatus extends Polymer.Element {
+      static get is() { 
+        return 'user-status'; 
+      }
+
+      static get properties() {
+        return {
+          name: {
+            type: String,
+            observer: '_nameChange'
+          },
+          status: {
+            type: String,
+            notify: true,
+            value: 'offline',
+          },
+        }
+      }
+
+      // observer for name
+      _nameChange(newValue, oldValue) {
+        const hash = newValue.split('').reduce((prevHash, currVal) => {
+          return ((prevHash << 5) - prevHash) + currVal.charCodeAt(0)
+        } , 0);
+        const color = '#' + Math.abs(hash).toString(16).slice(0, 6);
+        this.updateStyles({'--usercolor': color});
+      }
+
+      // computed property function
+      userAbbreviation(name) {
+        if (name) {
+          return name.split(' ')
+            .map(e => e[0])
+            .slice(0, 2)
+            .join('');
+        }
+        return 'JS';
+      }
+
+      // click on status handler
+      _handleStatusClick(evt) {
+        this.set('choosingStatus', !this.choosingStatus);
+      }
+
+      // click handler for status change
+      _changeStatus(evt) {
+        evt.stopPropagation();
+        const newStatus = evt.target.dataset.status;
+        this.set('status', newStatus);
+        this.set('choosingStatus', false);
+      }
+
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.$.status.addEventListener('click', this._handleStatusClick.bind(this))
+      }
+
+      disconnectedCallback() {
+        super.diconnectedCallback();
+        // could clear eventlisteners if ones were attached outside of the shadow-root
+      }
+    }
+
+    window.customElements.define(UserStatus.is, UserStatus);
+  </script>
+
+</dom-module>
+
