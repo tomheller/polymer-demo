@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>user-status</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
+    
+    <template id="user-status">
+      <svg viewBox="0 0 100 100" width="0" height="0" hidden>
+        <defs>
+          <symbol id="offline">
+            <rect x="25" y="25" width="50" height="50" fill="transparent" stroke="#efefef" stroke-width="2"></rect>
+          </symbol>
+          <symbol id="away">
+            <rect x="25" y="25" width="50" height="50" fill="#efd325"></rect>
+          </symbol>
+          <symbol id="busy">
+            <rect x="25" y="25" width="50" height="50" fill="#cc260e"></rect>
+          </symbol>
+          <symbol id="online">
+            <rect x="25" y="25" width="50" height="50" fill="#42d445"></rect>
+          </symbol>
+        </defs>
+      </svg>
+
+      <style>
+        :host {
+          display: flex;
+          align-items: center;
+          --usercolor: #bada55;
+        }
+        .status,
+        .useravatar {
+          width: 4rem;
+          height: 4rem;
+          margin-left: 0.5rem;
+          margin-right: 0.5rem;
+        }
+
+        .status {
+          background-color: #cecece;
+          cursor: pointer;
+          position: relative;
+        }
+        
+        .selector {
+          position: absolute;
+        }
+
+        svg:not([hidden]) {
+          width: 100%;
+          height: 100%;
+        }
+
+        .useravatar {
+          border-radius: 50%;
+          background-color: var(--usercolor);
+          color: #fff;
+          font-size: 2rem;
+          line-height: 2em;
+          text-align: center;
+          vertical-align: middle;
+        }
+        
+        p {
+          font-size: 2em;
+        }
+      </style>
+
+      <div class="status" id="user-status-status">
+        <div id="user-status-selector" class="selector" hidden=hidden>
+          <button class="status-button" data-status="offline">Offline</button>
+          <button class="status-button" data-status="away">Away</button>
+          <button class="status-button" data-status="busy">Busy</button>
+          <button class="status-button" data-status="online">Online</button>
+        </div>
+        <svg viewBox="0 0 100 100">
+          <use id="user-status-statussymbol" xlink:href="" >
+        </svg>
+      </div>
+
+
+      <!-- computed properties -->
+      <div id="user-status-avatar" class="useravatar">
+        [[userAbbreviation(name)]]
+      </div>
+
+      <!-- print properties in template --> 
+      <p id="user-status-name">[[name]]</p>
+
+    </template>
+  
+    <script src="./user-status.js"></script>
+    
+  </head>
+  <body>
+   <user-status
+    name="Hello Stahlstadt"
+    status="away"
+   >
+
+   </user-status>
+  </body>
+</html>
