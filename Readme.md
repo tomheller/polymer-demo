@@ -5,8 +5,14 @@ Polymer and webcomponents demo
 
 Install dependencies with `bower install`
 
-Use either [polymer-cli](https://github.com/Polymer/polymer-cli) or a static fileserver to serve polymer folder. 
+Use either [polymer-cli](https://github.com/Polymer/polymer-cli) or a static fileserver to serve `polymer` folder. 
 
-## Web component demo 
+## Polymer ES6 demo
 
-tbd
+Install dependencies with `bower install`
+
+Use either [polymer-cli](https://github.com/Polymer/polymer-cli) or a static fileserver to serve `polymer-es6` folder. 
+
+## Standard demo 
+
+Use any static fileserver to server the `standard` folder.
